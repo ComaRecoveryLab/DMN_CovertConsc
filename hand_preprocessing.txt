@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#reorient
+fslreorient2std /autofs/space/nicc_001/RESPONSE/TCRp/ (input filename) (output file name)
+
+
+#create average 3D volume of all time points in 4D volume
+fslmaths (input filename - reoriented 4D volume) -Tmean (output file name)
+
+#extract brain - CHECK extraction, may need to edit parameters
+bet (input filename - structural T1 and output of fslmaths) (output file name) -f 0.3
+
+#create motion outlier text file
+fsl_motion_outliers -i(input image- reoriented 4D volume) -o (confound text file) --dummy=9
